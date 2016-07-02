@@ -9,16 +9,23 @@ def check_file(name):
     if not os.path.isfile(name):
         copyfile('template.tex', name + '.tex')
     
-# If no such file is found, create a new one for the current month. 
-# Should only do this at the beginning of each month, or the first
-# time that a journal entry is added in a new month.
-def create_new_file(): 
+def user_input(filename):
+    
+    header = ''
+    if input("Header, (y)es or (n)o?") == 'y':
+        header = input("Header: ")
+    entry = input("Entry: ")
 
+    add_entry(header, filename)
 
 # Add a new journal entry to the monthly journal
-def add_entry(header, f):
+def add_entry(header, filename):
 
     begin_env = "\\begin{entry}{\\today}{" + title + "}"
+    with open(filename) as f:
+        content = f.readlines()
+
+    
 
 # Returns the current month
 def get_date():
@@ -27,10 +34,7 @@ def get_date():
 
 if __name__ == "__main__":
 
-    cur_name = get_date + '.tex'
-    check_file(cur_name)
-
-    with open(cur_name) as f:
-
-    
+    filename = get_date + '.tex'
+    check_file(filename)
+    user_input(filename)
     
