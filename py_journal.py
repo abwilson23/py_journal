@@ -39,6 +39,10 @@ def get_date():
     time = datetime.datetime.now()
     return time.strftime("%B%Y")
 
+# Compiles the journal
+def compile_tex():
+
+
 if __name__ == "__main__":
 
     filename = str(get_date()) + ".tex"
