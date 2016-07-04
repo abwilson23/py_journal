@@ -1,4 +1,4 @@
-import os.path as os
+import os.path
 from shutil import copyfile
 import datetime
 
@@ -7,7 +7,7 @@ import datetime
 def check_file(name):
 
     if not os.path.isfile(name):
-        copyfile('template.tex', name + '.tex')
+        copyfile('template.tex', name)
     
 def user_input(filename):
     
@@ -16,25 +16,32 @@ def user_input(filename):
         header = input("Header: ")
     entry = input("Entry: ")
 
-    add_entry(header, filename)
+    add_entry(header, entry, filename)
 
 # Add a new journal entry to the monthly journal
-def add_entry(header, filename):
+def add_entry(header, entry, filename):
 
-    begin_env = "\\begin{entry}{\\today}{" + title + "}"
-    with open(filename) as f:
+    begin_env = "\\begin{entry}{\\today}{" + header + "}"
+    end_env = "\\end{entry}\n\\end{document}"
+    with open(filename, 'r+') as f:
         content = f.readlines()
-
-    
+        content[-1] = begin_env
+        content.append(entry)
+        content.append(end_env)
+        f.seek(0)
+        
+        for line in content:
+            f.write("%s\n" % line)
+        f.truncate()
 
 # Returns the current month
 def get_date():
-    time = datetime.date.now()
+    time = datetime.datetime.now()
     return time.strftime("%B%Y")
 
 if __name__ == "__main__":
 
-    filename = get_date + '.tex'
+    filename = str(get_date()) + ".tex"
     check_file(filename)
     user_input(filename)
     
