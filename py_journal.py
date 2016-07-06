@@ -1,4 +1,5 @@
 import os.path
+import subprocess
 from shutil import copyfile
 import datetime
 
@@ -18,6 +19,7 @@ def user_input(filename):
 
     add_entry(header, entry, filename)
 
+
 # Add a new journal entry to the monthly journal
 def add_entry(header, entry, filename):
 
@@ -31,16 +33,20 @@ def add_entry(header, entry, filename):
         f.seek(0)
         
         for line in content:
-            f.write("%s\n" % line)
+            f.write("%s" % line)
         f.truncate()
+        compile_tex(filename)
+
 
 # Returns the current month
 def get_date():
     time = datetime.datetime.now()
     return time.strftime("%B%Y")
 
+
 # Compiles the journal
-def compile_tex():
+def compile_tex(name):
+    subprocess.check_call(['pdflatex', name])
 
 
 if __name__ == "__main__":
