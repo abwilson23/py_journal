@@ -12,19 +12,18 @@ def check_file(name):
     
 def user_input(filename):
     
-    header = ''
-    if input("Header, (y)es or (n)o?") == 'y':
-        header = input("Header: ")
+    date = input("Date: ") or get_day_for_entry()
+    header = input("Header: ") 
     entry = input("Entry: ")
 
-    add_entry(header, entry, filename)
+    add_entry(header, date, entry, filename)
 
 
 # Add a new journal entry to the monthly journal
-def add_entry(header, entry, filename):
+def add_entry(header, date, entry, filename):
 
-    begin_env = "\\begin{entry}{\\today}{" + header + "}"
-    end_env = "\\end{entry}\n\\end{document}"
+    begin_env = "\\begin{entry}{" + date + "}{" + header + "}"
+    end_env = "\\end{entry}\n\n\\end{document}"
     with open(filename, 'r+') as f:
         content = f.readlines()
         content[-1] = begin_env
@@ -38,11 +37,15 @@ def add_entry(header, entry, filename):
         compile_tex(filename)
 
 
-# Returns the current month
-def get_date():
+# Returns the name for the file 
+def get_date_for_filename():
     time = datetime.datetime.now()
-    return time.strftime("%B%Y")
+    return str(time.strftime("%B%Y"))
 
+# Returns the date for the header
+def get_day_for_entry():
+    time = datetime.datetime.now()
+    return str(time.strftime("%A, %B %-d"))
 
 # Compiles the journal
 def compile_tex(name):
@@ -51,7 +54,7 @@ def compile_tex(name):
 
 if __name__ == "__main__":
 
-    filename = str(get_date()) + ".tex"
+    filename = get_date_for_filename() + ".tex"
     check_file(filename)
     user_input(filename)
     
