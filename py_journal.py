@@ -15,6 +15,7 @@ def user_input(filename):
     date = input("Date: ") or get_day_for_entry()
     header = input("Header: ") 
     entry = input("Entry: ")
+    bike_info = input("Bike distance: ")
 
     add_entry(header, date, entry, filename)
 
