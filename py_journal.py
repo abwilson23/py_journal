@@ -1,7 +1,7 @@
 import os.path
 import subprocess
 from shutil import copyfile
-import datetime
+from datetime import datetime, timedelta
 
 
 # Finds monthly journal tex file in the journal directory.
@@ -15,10 +15,12 @@ def user_input(filename):
     date = input("Date: ") or get_day_for_entry()
     header = input("Header: ") 
     entry = input("Entry: ")
-    bike_info = input("Bike distance: ")
+    # bike_info = input("Bike distance: ")
+
+    if date == "yesterday":
+        date = get_yesterday_date()
 
     add_entry(header, date, entry, filename)
-
 
 # Add a new journal entry to the monthly journal
 def add_entry(header, date, entry, filename):
@@ -40,18 +42,22 @@ def add_entry(header, date, entry, filename):
 
 # Returns the name for the file 
 def get_date_for_filename():
-    time = datetime.datetime.now()
+    time = datetime.now()
     return str(time.strftime("%B%Y"))
 
 # Returns the date for the header
 def get_day_for_entry():
-    time = datetime.datetime.now()
+    time = datetime.now()
     return str(time.strftime("%A, %B %-d"))
+
+# Returns yesterdays date, this is a pretty common one so it gets a special case
+def get_yesterday_date():
+    yesterday = datetime.now() - timedelta(days=1)
+    return str(yesterday.strftime("%A, %B %-d"))
 
 # Compiles the journal
 def compile_tex(name):
     subprocess.check_call(['pdflatex', name])
-
 
 if __name__ == "__main__":
 
